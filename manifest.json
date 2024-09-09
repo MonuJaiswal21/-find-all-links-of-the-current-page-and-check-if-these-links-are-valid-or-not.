@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "my third extension",
+  "version": "1.0",
+  "description": "Get all URLs from the current tab and check if they are valid.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+    
+  }
+}
+
+  
