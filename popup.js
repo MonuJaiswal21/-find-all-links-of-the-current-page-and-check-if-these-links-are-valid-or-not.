@@ -1,20 +1,19 @@
-document.getElementById('checkUrls').addEventListener('click', () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const tabId = tabs[0].id;
-      chrome.runtime.sendMessage({ action: 'getAndValidateUrls', tabId }, (response) => {
-        const resultsDiv = document.getElementById('results');
+document.addEventListener('DOMContentLoaded', () => {
+    chrome.storage.local.get('linkResults', ({ linkResults }) => {
+      const resultsDiv = document.getElementById('results');
+      if (linkResults) {
         resultsDiv.innerHTML = '';
-        if (response.validUrls.length === 0) {
-          resultsDiv.textContent = 'No valid URLs found.';
-        } else {
-          response.validUrls.forEach(url => {
-            const p = document.createElement('p');
-            p.textContent = url;
-            p.classList.add('valid-url');
-            resultsDiv.appendChild(p);
-          });
-        }
-      });
+        linkResults.forEach(({ link, valid }) => {
+          const linkElement = document.createElement('div');
+          linkElement.className = 'link';
+          linkElement.innerHTML = `
+            <a href="${link}" target="_blank">${link}</a> - <span class="${valid ? 'valid' : 'invalid'}">${valid ? 'Valid' : 'Invalid'}</span>
+          `;
+          resultsDiv.appendChild(linkElement);
+        });
+      } else {
+        resultsDiv.textContent = 'No links found.';
+      }
     });
   });
   
